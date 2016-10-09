@@ -1,0 +1,38 @@
+{
+  "name": "QueenLook Admin",
+  "version": "0.0.1",
+  "homepage": "",
+  "authors": [
+    "Flávio Luiz"
+  ],
+  "description": "Gerenciamento de clientes da QueenLook",
+  "keywords": [
+    "cadastro",
+    "queenlook"
+  ],
+  "license": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests",
+    "pages",
+    "index.html",
+    "/js"
+  ],  
+  "dependencies": {
+    "bootstrap": "~3.3.7",    
+    "datatables": "~1.10.4",
+    "handlebars" : "~4.0.5",
+    "toastr" : "~2.1.3",
+    "spin-js" : "~2.0.1",
+    "jquery-mask-library" : "*",    
+    "font-awesome": "~4.2.0",    
+    "metisMenu": "~1.1.3",
+    "jquery-ui" : "1.12.1",
+    "bootbox" : "*",
+    "bootstrap-datepicker" : "*",
+    "datetimepicker" : "*"
+  }
+}

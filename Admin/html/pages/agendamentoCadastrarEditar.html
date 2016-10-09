@@ -1,0 +1,127 @@
+
+
+
+<div id="page-wrapper">
+    <div class="row">
+        
+        <div class="col-lg-12">
+            <h1 class="page-header">{{#if codigo}}Edição {{else}}Novo {{/if}}  Agendamento </h1>
+        </div>
+
+    </div>
+    <div class="tab-pane" id="cadastro"></div>
+    <script id="templateCadastro" type="text/x-handlebars-template">
+        <form id="clienteForm" role="form">
+            <br />
+            <div class="row">
+                <div class="form-group col-md-2 input-group">
+                    <span class="input-group-addon" title="Código" ><i class="fa fa-chevron-right"></i></span> 
+                    <input type="text" placeholder="Código" class="form-control" value="{{codigo}}" disabled />
+                    <input type="hidden" name="_id" value="{{_id}}" />
+                    <input type="hidden" name="idCliente" value="{{idCliente}}" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-6 input-group">
+                    <span class="input-group-addon" title="Nome Cliente" ><i class="fa fa-user"></i></span>
+                    <input  type="text"  class="form-control" placeholder="Buscar Cliente" name="nome" value="{{nomeCliente}}" autocomplete="off" >
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-6 input-group">
+
+                    <span class="input-group-addon" title="Atendente"><i class="fa fa-users"></i></span>
+                    <select class="form-control" name="idAtendente" >
+                        <option value="">Atendente</option>
+                            {{#each ListaAtendente as |itemAtendente|}}<option {{#ifCond itemAtendente '==' ../idCliente}} selected {{/ifCond}} value="{{itemAtendente.valor}}">{{itemAtendente.nome}}</option>{{/each}}
+                    </select>               
+                    
+                </div>                
+            </div>
+            <div class="row">
+                <div class="form-group col-md-3  input-group date" id="aa">                    
+                    <input type="text" class="form-control"  placeholder="Data" name="data" value="{{data}}" autocomplete="off" />
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+            </div>
+        </form>
+            
+            
+            <hr />
+            <div class="row">
+                <div class="pull-right">
+                    <a class="btn btn-link" href="javascript:void(0)" onclick="carregaAgendamentoCadastroOuEditar();">Cancelar</a>
+                    <a href="javascript:void(0)" class="btn btn-primary salvar" onclick="cadastrarAgendamento(); return false;"><i class="fa fa-save"></i>&nbsp; Salvar</a>
+                </div>
+            </div>
+        
+
+    </script>
+
+    <!--Templates-->
+    
+
+</div>
+
+
+
+<script type="text/javascript">
+var clienteEscolhido;
+
+    $(document).ready(function(){            
+        
+        var templates = Handlebars.compile($("#templateCadastro").html());
+        
+        $("#cadastro").html(templates);
+
+        $("#aa").datetimepicker();
+
+       $('[name = "nome"]').keyup(function(){
+           this.value = this.value.toLowerCase();
+       });
+
+        $('[name = "nome"]').autocomplete({
+            source: function( request, response ) {
+                
+                $.post("/cliente/listarClientes/",{nome : request.term}, function(data){
+                                        
+                    response($.map(data.itens,function(item){
+                        
+                        return {
+                            label : item.codigo + " - " + item.nome,
+                            value : item.codigo + " - " + item.nome,
+                            data : item._id
+                        }
+                    }));
+                });
+            },
+            minLength: 1,
+            open: function() {},
+            close: function() {},
+            focus: function(event,ui) {},
+            select: function(event, ui) {
+                $('[name = "idCliente"]').val(ui.item.data);
+            }
+        });       
+        
+
+        $( ".input-group-addon" ).tooltip({
+        show: {
+            effect: "slideDown",
+            delay: 250
+            }
+        });
+
+    });
+        
+    function cadastrarAgendamento(){      
+        var dados = $("#clienteForm").serializeObject();
+        
+        $.post("/agendamento/SalvarAgendamento/", dados, function(e){
+            //carregarCliente(true);
+        });        
+    };
+    
+</script>

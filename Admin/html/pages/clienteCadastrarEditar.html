@@ -1,0 +1,201 @@
+<div id="page-wrapper">
+    
+    <div class="row">
+        
+        <div class="col-lg-12">
+            <h1 class="page-header">{{#if codigo}}Edição {{else}}Novo {{/if}}  Cliente </h1>
+        </div>
+    
+    </div>
+
+    <div class="tab-pane" id="cadastro"></div>
+    <script id="templateCadastro" type="text/x-handlebars-template">
+        <form id="clienteForm" role="form">
+            <br />
+            <div class="row">
+                <div class="form-group col-md-2 input-group">
+                    <span class="input-group-addon" title="Código" ><i class="fa fa-chevron-right"></i></span> 
+                    <input type="text" placeholder="Código" class="form-control" value="{{codigo}}" disabled />
+                    <input type="hidden" name="codigo" value="{{codigo}}" />
+                    <input type="hidden" name="_id" value="{{_id}}" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-6 input-group">
+                    <span class="input-group-addon" title="Nome" ><i class="fa fa-user"></i></span>
+                    <input  type="text" class="form-control" placeholder="Nome" name="nome" value="{{nome}}" autocomplete="off" title="Nome" >
+                </div>
+            </div>            
+            <div class="row">
+                <div class="form-group col-md-6  input-group">
+                    <span class="input-group-addon" title="Email"><i class="fa fa-at"></i></span>
+                    <input type="text" class="form-control" placeholder="Email" name="email" value="{{email}}" autocomplete="off" />
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="form-group col-md-6 input-group">
+                    <span class="input-group-addon" title="Rua"><i class="fa fa-street-view"></i></span>
+                    <input type="text" class="form-control" placeholder="Rua" name="rua" value="{{rua}}" autocomplete="off" />
+
+                    <span class="input-group-addon" title="Número"><i class="fa fa-caret-right"></i></span>
+                    <input type="text" class="form-control" placeholder="Número" name="numero" value="{{numero}}" autocomplete="off" />
+                </div>                
+            </div>
+            <div class="row">
+                <div class="form-group col-md-6 input-group">
+                    <span class="input-group-addon" title="Bairro"><i class="fa fa-map-signs"></i></span>
+                    <input type="text" class="form-control" placeholder="Bairro" name="bairro" value="{{bairro}}" autocomplete="off" />
+
+                    <span class="input-group-addon" title="Cidade"><i class="fa fa-map-o"></i></span>
+                    <input type="text" class="form-control" placeholder="Cidade" name="cidade" value="{{cidade}}" autocomplete="off" />
+                </div>                
+            </div>
+            <div class="row">
+                <div class="form-group col-md-6 input-group">
+                    <span class="input-group-addon" title="Data de Nascimento"><i class="fa fa-calendar"></i></span>
+                    <input type="text" class="form-control" placeholder="Nascimento" name="nascimento" value="{{nascimento}}" autocomplete="off" />
+
+                    <span class="input-group-addon" title="Tipo de Indicacao"><i class="fa fa-question"></i></span>
+                    <select class="form-control" name="tipoIndicacao" >
+                        <option value="">Tipo Indicação</option>
+                            {{#each listaIndicacao as |itemIndicacao|}}<option {{#ifCond itemIndicacao '==' ../tipoIndicacao}} selected {{/ifCond}} value="{{itemIndicacao}}">{{itemIndicacao}}</option>{{/each}}
+                    </select>               
+                    
+                </div>                
+            </div>
+            <div class="row">
+                <div class="form-group col-md-6 input-group">
+                    <span class="input-group-addon" title="Instagram"><i class="fa fa-instagram"></i></span>
+                    <input type="text" class="form-control" placeholder="Instagram" name="instagram" value="{{instagram}}" autocomplete="off" />
+
+                    <span class="input-group-addon" title="Facebook"><i class="fa fa-facebook-official "></i></span>
+                    <input type="text" class="form-control" placeholder="Facebook" name="facebook" value="{{facebook}}" autocomplete="off" />
+                </div>                
+            </div>
+            </form>
+            <br class="cb" />
+            <div class="row">
+                <div class="form-group col-md-6 input-group">
+                    <span class="input-group-addon" title="Número de Telefone"><i class="fa fa-phone-square"></i></span>
+                    <input type="text" class="form-control" placeholder="Telefone" name="telefone" value="{{telefone}}" autocomplete="off" />
+
+                    <span class="input-group-addon" title="Tipo de Telefone"><i class="fa fa-volume-control-phone"></i></span>
+                    <select class="form-control" name="tipoTelefone" >
+                        <option value="">Tipo Telefone</option>
+                            {{#each tipoTelefone as |item|}}<option value="{{item}}">{{item}}</option>{{/each}}
+                    </select>
+                    
+                    <span class="input-group-addon" title="Adicionar"><i class="fa fa-plus-circle"></i></span>
+                    <a href="javascript:void(0)" class="form-control btn btn-primary" onclick="adicionarTelefone(); return false;">Add</a>
+                </div>                
+            </div>
+
+            <div  class="row" id="telefones"></div>            
+            
+
+            
+            <hr />
+            <div class="row">
+                <div class="pull-right">
+                    <a class="btn btn-link" href="javascript:void(0)" onclick="cancelarCadastroCliente();">Cancelar</a>
+                    <a href="javascript:void(0)" class="btn btn-primary salvar" onclick="cadastrarCliente(); return false;"><i class="fa fa-save"></i>&nbsp; Salvar</a>
+                </div>
+            </div>
+        
+
+    </script>
+
+    <!--Templates-->
+    
+
+</div>
+
+
+
+<script type="text/javascript">
+var listaTelefone = [];
+var indice = 0;
+
+    $(document).ready(function(){    
+        
+        var templates = Handlebars.compile($("#templateCadastro").html());
+        
+        $("#cadastro").html(templates);
+        
+        $('[name="nascimento"]').mask("99/99/9999");
+        $('[name="telefone"]').mask("(99)99999-9999");
+        
+        {{#if telefones}}
+            listaTelefone = {{{json telefones}}};
+            atualizaTelefones();
+        {{/if}}
+
+        $( ".input-group-addon" ).tooltip({
+        show: {
+            effect: "slideDown",
+            delay: 250
+        }
+        });
+
+    });
+    
+    function adicionarTelefone(){
+        var telefone = $('[name = "telefone"]').val();
+        var tipoTelefone = $('[name = "tipoTelefone"]').val();
+        indice ++;
+
+        if(telefone == "" || tipoTelefone == "" ){
+            throw "Adicione o telefone antes de prosseguir";
+        }
+        
+        var telObj = {"numero":telefone,"tipo":tipoTelefone,"_id":indice};
+        if(listaTelefone.length == 0){
+            listaTelefone.push(telObj);
+        }else{
+            if(listaTelefone.map(function(e){return e.numero;}).indexOf(telefone) >= 0)
+                throw "Telefone já adicionado";        
+
+            listaTelefone.push(telObj);
+        };
+
+        $('[name = "telefone"]').val("");
+        $('[name = "tipoTelefone"]').val("");
+        
+        atualizaTelefones();
+    };
+
+    function excluirTelefone(id){        
+        var indice = listaTelefone.map(function(e){return e._id;}).indexOf(id);
+        listaTelefone.splice(indice,1);
+        atualizaTelefones();
+        indice --;
+    };
+
+    function atualizaTelefones(){
+        var temp = Handlebars.compile($("#templateTelefone").html());
+        $("#telefones").html(temp({itensTelefone:listaTelefone}));
+    };
+
+    
+    function cadastrarCliente(){
+
+        if($('[name = "telefone"]').val() != "")
+            throw "Adicione o telefone antes de salvar";
+
+        var dados = $("#clienteForm").serializeObject();
+        if(dados.nome == "")
+            throw "Nome é obrigatório";
+
+        dados.telefones = listaTelefone;
+        $.post("/cliente/addcliente/", dados, function(e){
+            carregarCliente(true);
+        });        
+    };
+
+    function cancelarCadastroCliente(){
+        carregarCliente(true);
+    }
+
+    
+</script>

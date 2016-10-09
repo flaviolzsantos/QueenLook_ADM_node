@@ -1,0 +1,19 @@
+{
+  "name": "jquery-mask-library",
+  "version": "0.0.1",
+  "main": "lib/mask.js",
+  "ignore": [
+    "**/.*",
+    "package.json"
+  ],
+  "homepage": "https://github.com/toranb/jquery-mask-library",
+  "_release": "0.0.1",
+  "_resolution": {
+    "type": "version",
+    "tag": "0.0.1",
+    "commit": "532033709a2957fa060b427ccff355c2b0797284"
+  },
+  "_source": "https://github.com/toranb/jquery-mask-library.git",
+  "_target": "*",
+  "_originalSource": "jquery-mask-library"
+}

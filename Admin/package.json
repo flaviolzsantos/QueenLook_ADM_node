@@ -1,0 +1,11 @@
+{
+  "name": "QueenLook",
+  "description": "Cadastro de Cliente da Queen Look",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "body-parser": "*",
+    "express": "*",
+    "nedb": "*"
+  }
+}
