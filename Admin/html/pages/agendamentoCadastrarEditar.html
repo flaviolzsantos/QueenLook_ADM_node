@@ -39,10 +39,18 @@
                 </div>                
             </div>
             <div class="row">
-                <div class="form-group col-md-3  input-group date" id="aa">                    
+                <div class="form-group col-md-3  input-group date">                    
                     <input type="text" class="form-control"  placeholder="Data" name="data" value="{{data}}" autocomplete="off" />
                     <span class="input-group-addon">
                         <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-3  input-group timepicker">                    
+                    <input type="text" class="form-control"  placeholder="hora" name="hora" value="{{hora}}" autocomplete="off" data-provide="timepicker" data-template="modal" data-minute-step="1" data-modal-backdrop="true" />
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-time" name="horaC"></span>
                     </span>
                 </div>
             </div>
@@ -72,13 +80,25 @@ var clienteEscolhido;
 
     $(document).ready(function(){            
         
-        var templates = Handlebars.compile($("#templateCadastro").html());
-        
+        var templates = Handlebars.compile($("#templateCadastro").html());        
         $("#cadastro").html(templates);
 
-        $("#aa").datetimepicker();
+        carregaAutoComplete();
+        carregaDataPicker();
+               
 
-       $('[name = "nome"]').keyup(function(){
+    });
+        
+    function cadastrarAgendamento(){      
+        var dados = $("#clienteForm").serializeObject();
+        
+        $.post("/agendamento/SalvarAgendamento/", dados, function(e){
+            //carregarCliente(true);
+        });        
+    };
+
+    function carregaAutoComplete(){
+        $('[name = "nome"]').keyup(function(){
            this.value = this.value.toLowerCase();
        });
 
@@ -113,15 +133,35 @@ var clienteEscolhido;
             delay: 250
             }
         });
+    };
+    function carregaDataPicker(){
 
-    });
-        
-    function cadastrarAgendamento(){      
-        var dados = $("#clienteForm").serializeObject();
-        
-        $.post("/agendamento/SalvarAgendamento/", dados, function(e){
-            //carregarCliente(true);
-        });        
+        $.fn.datepicker.dates['br'] = {
+            days: ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sabado", "Domingo"],
+            daysShort: ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sab", "Dom"],
+            daysMin: ["Do", "Se", "Te", "Qr", "Qu", "Sx", "Sa", "Do"],
+            months: ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"],
+            monthsShort: ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"]
+        };
+
+        var date = new Date();
+        var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+
+        $('[name = data]').datepicker({
+            format : "dd/mm/yyyy",
+            language : "br",
+            todayHighlight: true,
+            startDate: today,
+            autoclose: true
+        });
+
+        $('[name = data]').datepicker('setDate', today);
+
+        $('[name = horaC]').timepicker({
+                minuteStep: 5,
+                showInputs: false,
+                disableFocus: true
+            });
     };
     
 </script>
