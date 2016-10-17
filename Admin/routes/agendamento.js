@@ -5,6 +5,7 @@ var Agendamento = function(){
     this.entidade = nomeEntidade;
     this.codigo = "";
     this.data = "";
+    this.hora = "";
     this.idAtendente = "";
     this.idCliente = "";
     this.ListaAtendente = [];
@@ -50,6 +51,8 @@ exports.SalvarAgendamento = function(req, res){
         agendamento.data = req.body.data;
         agendamento.idAtendente = req.body.idAtendente;
         agendamento.idCliente = req.body.idCliente;
+        agendamento.data = req.body.data;
+        agendamento.hora = req.body.hora;
         
         dao.insert(agendamento);
         res.send("ok");
